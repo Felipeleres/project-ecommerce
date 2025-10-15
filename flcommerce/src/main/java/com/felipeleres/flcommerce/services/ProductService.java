@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.nio.ReadOnlyBufferException;
 import java.util.List;
@@ -37,12 +39,28 @@ public class ProductService {
     @Transactional
     public ProductDTO insert (ProductDTO productDTO){
 
-        Product product = new Product(null,productDTO.getName(),productDTO.getDescription(),
-                productDTO.getPrice(),productDTO.getImgUrl());
-
-       product = productRepository.save(product);
-
-       return new ProductDTO(product);
+        Product product = new Product();
+        copyDtoToEntity(productDTO,product);
+        product = productRepository.save(product);
+        return new ProductDTO(product);
     }
+
+    @Transactional
+    public ProductDTO update (Long id,ProductDTO productDTO){
+
+        Product product = productRepository.getReferenceById(id);
+        copyDtoToEntity(productDTO,product);
+        product = productRepository.save(product);
+        return new ProductDTO(product);
+    }
+
+    private void copyDtoToEntity(ProductDTO productDTO, Product product){
+
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setPrice(productDTO.getPrice());
+        product.setImgUrl(productDTO.getImgUrl());
+    }
+
 
 }
