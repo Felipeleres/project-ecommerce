@@ -14,11 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.nio.ReadOnlyBufferException;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,8 +32,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll (Pageable pageable){
-        Page<Product> result = productRepository.findAll(pageable);
+    public Page<ProductDTO> findAll (String name,Pageable pageable){
+        Page<Product> result = productRepository.searchByName(name,pageable);
         return result.map(x -> new ProductDTO(x));
     }
 
