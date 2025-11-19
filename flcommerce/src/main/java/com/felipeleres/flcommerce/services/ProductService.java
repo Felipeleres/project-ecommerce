@@ -1,6 +1,7 @@
 package com.felipeleres.flcommerce.services;
 
 import com.felipeleres.flcommerce.dto.ProductDTO;
+import com.felipeleres.flcommerce.dto.ProductMinDTO;
 import com.felipeleres.flcommerce.entities.Product;
 import com.felipeleres.flcommerce.repositories.ProductRepository;
 
@@ -32,9 +33,9 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll (String name,Pageable pageable){
+    public Page<ProductMinDTO> findAll (String name, Pageable pageable){
         Page<Product> result = productRepository.searchByName(name,pageable);
-        return result.map(x -> new ProductDTO(x));
+        return result.map(x -> new ProductMinDTO(x));
     }
 
     @Transactional
