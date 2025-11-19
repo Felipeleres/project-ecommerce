@@ -1,7 +1,9 @@
 package com.felipeleres.flcommerce.services;
 
+import com.felipeleres.flcommerce.dto.CategoryDTO;
 import com.felipeleres.flcommerce.dto.ProductDTO;
 import com.felipeleres.flcommerce.dto.ProductMinDTO;
+import com.felipeleres.flcommerce.entities.Category;
 import com.felipeleres.flcommerce.entities.Product;
 import com.felipeleres.flcommerce.repositories.ProductRepository;
 
@@ -82,6 +84,12 @@ public class ProductService {
         product.setDescription(productDTO.getDescription());
         product.setPrice(productDTO.getPrice());
         product.setImgUrl(productDTO.getImgUrl());
+        product.getCategories().clear();
+        for(CategoryDTO catDTO: productDTO.getCategories()){
+            Category cat = new Category();
+            cat.setId(catDTO.getId());
+            product.getCategories().add(cat);
+        }
     }
 
 

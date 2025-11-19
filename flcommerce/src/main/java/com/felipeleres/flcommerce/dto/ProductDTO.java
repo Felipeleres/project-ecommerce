@@ -1,10 +1,15 @@
 package com.felipeleres.flcommerce.dto;
 
 
+import com.felipeleres.flcommerce.entities.Category;
 import com.felipeleres.flcommerce.entities.Product;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ProductDTO {
@@ -22,6 +27,9 @@ public class ProductDTO {
     @Positive(message = "O preço deve ser positivo!")
     private Double price;
     private String imgUrl;
+
+    @NotEmpty(message = "Deve ter pelos menos uma categoria!")
+    private List<CategoryDTO> categories = new ArrayList<>();
 
 
     public ProductDTO () {
@@ -42,6 +50,9 @@ public class ProductDTO {
         description = product.getDescription();
         imgUrl = product.getImgUrl();
         price = product.getPrice();
+        for(Category cat : product.getCategories()){
+            categories.add(new CategoryDTO(cat));
+        }
     }
 
     public Long getId() {
@@ -62,5 +73,9 @@ public class ProductDTO {
 
     public String getImgUrl() {
         return imgUrl;
+    }
+
+    public List<CategoryDTO> getCategories() {
+        return categories;
     }
 }
