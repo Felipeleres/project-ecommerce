@@ -3,6 +3,7 @@ package com.felipeleres.flcommerce.controllers.handlers;
 import com.felipeleres.flcommerce.dto.CustomError;
 import com.felipeleres.flcommerce.dto.ValidationError;
 import com.felipeleres.flcommerce.services.exceptions.DataBaseException;
+import com.felipeleres.flcommerce.services.exceptions.ForbiddenException;
 import com.felipeleres.flcommerce.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(DataBaseException.class)
-    public ResponseEntity<CustomError> resourceNotFound (DataBaseException e, HttpServletRequest request) {
+    public ResponseEntity<CustomError> dataBase (DataBaseException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         CustomError err = new CustomError(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());
         return ResponseEntity.status(status).body(err);
@@ -39,6 +40,13 @@ public class ControllerExceptionHandler {
         for(FieldError f : e.getBindingResult().getFieldErrors()){
             err.addErrors(f.getField(),f.getDefaultMessage());
         }
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<CustomError> forbidden (ForbiddenException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        CustomError err = new CustomError(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
